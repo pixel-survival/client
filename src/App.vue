@@ -1,28 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Login />
+    {{ isAuthenticated }}
+    <LoginFailed />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { Vue, Component } from 'vue-property-decorator';
+import { mapGetters } from 'vuex'
+import Login from './components/Login';
+import LoginFailed from './components/Modals/LoginFailed';
 
-export default {
-  name: 'App',
+@Component({
   components: {
-    HelloWorld
+    Login,
+    LoginFailed
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated'])
   }
+})
+export default class App extends Vue {
+  
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  margin: 0;
 }
 </style>
