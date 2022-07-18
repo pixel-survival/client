@@ -8,7 +8,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
-export default class LoginFailed extends Vue {
+export default class ModalLoginFailed extends Vue {
     text = '';
 
     onBeforeOpen(event) {

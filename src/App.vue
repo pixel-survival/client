@@ -1,8 +1,7 @@
 <template>
   <div id="app">
     <Login />
-    {{ isAuthenticated }}
-    <LoginFailed />
+    <ModalLoginFailed />
   </div>
 </template>
 
@@ -10,12 +9,12 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { mapGetters } from 'vuex'
 import Login from './components/Login';
-import LoginFailed from './components/Modals/LoginFailed';
+import ModalLoginFailed from './components/Modals/ModalLoginFailed';
 
 @Component({
   components: {
     Login,
-    LoginFailed
+    ModalLoginFailed
   },
   computed: {
     ...mapGetters(['isAuthenticated'])
@@ -29,5 +28,13 @@ export default class App extends Vue {
 <style>
 body {
   margin: 0;
+}
+
+.valid {
+  border-color: #28a745 !important;
+}
+
+.invalid {
+  border-color: #dc3545 !important;
 }
 </style>

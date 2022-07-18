@@ -12,17 +12,25 @@ class LoginClient {
             password
         });
 
-        return await response.json();
+        return response;
     }
 
-    _request(address, method = 'GET', body = {}) {
-        return fetch(address, {
+    async _request(address, method = 'GET', body = {}) {
+        let data;
+
+        await fetch(address, {
             method,
             headers: {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(body)
-        })
+        }).then(async response => {
+            data = await response.json();
+        }).catch(() => {
+            data = null;
+        });
+
+        return data;
     }
 }
 
