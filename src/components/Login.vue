@@ -1,33 +1,25 @@
 <template>
   <div class="login">
     <div class="login__form ps-panel ps-panel--yellow">
-      <ValidationObserver v-slot="{ handleSubmit }">
-          <ValidationProvider rules="required|alpha_num" v-slot="{ errors, valid }">
-            <input
-              type="text"
-              class="login__input ps-input"
-              placeholder="Username"
-              v-model="login"
-              :class="checkValidation(errors, valid)"
-            />
-          </ValidationProvider>
-          <ValidationProvider rules="required" v-slot="{ errors, valid }">
-            <input
-              type="password"
-              class="login__input ps-input"
-              placeholder="Password"
-              v-model="password"
-              :class="checkValidation(errors, valid)"
-            />
-          </ValidationProvider>
-          <button
-            type="button"
-            class="login__button ps-button ps-button--green"
-            @click="handleSubmit(auth)"
-          >
-            Login
-          </button>
-       </ValidationObserver>
+      <input
+        type="text"
+        class="login__input ps-input"
+        placeholder="Username"
+        v-model="login"
+      />
+      <input
+        type="password"
+        class="login__input ps-input"
+        placeholder="Password"
+        v-model="password"
+      />
+      <button
+        type="button"
+        class="login__button ps-button ps-button--green"
+        @click="auth"
+      >
+        Login
+      </button>
     </div>
     <loader
       v-show="isPreload"
@@ -91,18 +83,6 @@ export default class Login extends Vue {
         text: response.message
       });
       this.isPreload = false;
-    }
-  }
-  
-  checkValidation(errors, valid) {
-    if (errors.length > 0) {
-      if (!valid) {
-        return 'invalid';
-      }
-    } else {
-      if (valid) {
-        return 'valid';
-      }
     }
   }
 }

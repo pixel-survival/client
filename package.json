@@ -10,7 +10,6 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "ps-gui-css": "github:space2pacman/ps-gui-css",
-    "vee-validate": "^3.4.14",
     "vue": "^2.7.4",
     "vue-class-component": "^7.2.6",
     "vue-js-modal": "^2.0.1",
