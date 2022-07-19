@@ -6,7 +6,7 @@
   >
     <div class="login-failed__container"> 
       <div class="login-failed__text">{{ text }}</div>
-      <button 
+      <button
         type="button"
         class="login__button ps-button ps-button--blue"
         @click="close"
@@ -27,6 +27,7 @@ export default class ModalLoginFailed extends Vue {
 
     onBeforeOpen(event) {
       this.text = event.params.text;
+
     }
 
     close() {

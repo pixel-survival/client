@@ -6,7 +6,9 @@
           type="text"
           class="login__input ps-input"
           placeholder="Login"
+          autofocus
           v-model="login"
+          @keydown.enter="auth"
           @keypress="validateInput($event, rules)"
         />
         <input
@@ -14,6 +16,7 @@
           class="login__input ps-input"
           placeholder="Password"
           v-model="password"
+          @keydown.enter="auth"
         />
         <button
           type="button"
