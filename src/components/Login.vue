@@ -106,6 +106,7 @@ export default class Login extends Vue {
 .login {
   background-image: url('./../assets/background.jpg');
   background-size: cover;
+  background-position: center;
 
   &__container {
     display: flex;
