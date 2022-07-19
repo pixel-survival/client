@@ -1,4 +1,4 @@
-# pixel
+# client
 
 ## Project setup
 ```
