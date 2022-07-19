@@ -27,7 +27,10 @@ class LoginClient {
         }).then(async response => {
             data = await response.json();
         }).catch(() => {
-            data = null;
+            data = {
+                status: 'error',
+                message: 'connection-errors.default'
+            };
         });
 
         return data;

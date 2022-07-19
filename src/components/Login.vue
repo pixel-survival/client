@@ -68,15 +68,6 @@ export default class Login extends Vue {
 
     const response = await loginClient.auth(this.login, this.password);
     
-    if (response === null) {
-      this.$modal.show('login-failed', {
-        text: this.$translator.translate('connection-errors.default')
-      });
-      this.isPreload = false;
-
-      return;
-    }
-    
     if (response.status === 'success') {
       this.SET_TOKEN(response.data.token);
       this.isPreload = false;
