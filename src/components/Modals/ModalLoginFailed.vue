@@ -1,6 +1,6 @@
 <template>
   <modal
-    name="login-failed"
+    :name="name"
     classes="ps-panel"
     @before-open="onBeforeOpen"
   >
@@ -22,6 +22,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class ModalLoginFailed extends Vue {
+    name = 'login-failed';
     text = '';
 
     onBeforeOpen(event) {
@@ -29,7 +30,7 @@ export default class ModalLoginFailed extends Vue {
     }
 
     close() {
-      this.$modal.hide('login-failed');
+      this.$modal.hide(this.name);
     }
 }
 </script>

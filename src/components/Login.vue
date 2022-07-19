@@ -4,8 +4,9 @@
       <input
         type="text"
         class="login__input ps-input"
-        placeholder="Username"
+        placeholder="Login"
         v-model="login"
+        @keypress="validateInput($event, rules)"
       />
       <input
         type="password"
@@ -51,6 +52,7 @@ export default class Login extends Vue {
   login = '';
   password = '';
   isPreload = false;
+  rules = /^[a-zA-Z0-9]+$/;
   
   async auth() {
     const ip = this.$config.ip;
@@ -66,7 +68,7 @@ export default class Login extends Vue {
     
     if (response === null) {
       this.$modal.show('login-failed', {
-        text: 'Нет связи с сервером или отсутствует подключение к интернету, попробуйте позже.'
+        text: this.$translator.translate('connection-errors.default')
       });
       this.isPreload = false;
 
@@ -80,9 +82,19 @@ export default class Login extends Vue {
 
     if (response.status === 'error') {
       this.$modal.show('login-failed', {
-        text: response.message
+        text: this.$translator.translate(response.message)
       });
       this.isPreload = false;
+    }
+  }
+
+  validateInput(event, rules) {
+    const symbol = String.fromCharCode(event.keyCode);
+
+    if(rules.test(symbol)) {
+      return true;
+    } else {
+      event.preventDefault();
     }
   }
 }
