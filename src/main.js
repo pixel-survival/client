@@ -4,7 +4,7 @@ import loader from 'vue-ui-preloader';
 import App from './App';
 import store from './store';
 import './mixins';
-import '../node_modules/ps-gui-css/dist/ps.css';
+import '../node_modules/ps-gui/dist/ps.css';
 
 Vue.config.productionTip = false;
 Vue.use(vmodal);

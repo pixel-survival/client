@@ -107,6 +107,7 @@ export default class Login extends Vue {
     font-size: 24px;
     color: #fff;
     font-weight: bold;
+    padding: 6.5px 0px;
   }
 }
 </style>
