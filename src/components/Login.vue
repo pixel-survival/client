@@ -1,40 +1,42 @@
 <template>
   <div class="login">
-    <div class="login__form ps-panel ps-panel--yellow">
-      <input
-        type="text"
-        class="login__input ps-input"
-        placeholder="Login"
-        v-model="login"
-        @keypress="validateInput($event, rules)"
+    <div class="login__container">
+      <div class="login__form ps-panel ps-panel--yellow">
+        <input
+          type="text"
+          class="login__input ps-input"
+          placeholder="Login"
+          v-model="login"
+          @keypress="validateInput($event, rules)"
+        />
+        <input
+          type="password"
+          class="login__input ps-input"
+          placeholder="Password"
+          v-model="password"
+        />
+        <button
+          type="button"
+          class="login__button ps-button ps-button--green"
+          @click="auth"
+        >
+          Login
+        </button>
+      </div>
+      <loader
+        v-show="isPreload"
+        name="spinning"
+        object="#ff9633"
+        color1="#ffffff"
+        color2="#17fd3d"
+        size="12"
+        speed="1"
+        bg="#343a40"
+        objectbg="#999793"
+        opacity="80"
+        disableScrolling="false"
       />
-      <input
-        type="password"
-        class="login__input ps-input"
-        placeholder="Password"
-        v-model="password"
-      />
-      <button
-        type="button"
-        class="login__button ps-button ps-button--green"
-        @click="auth"
-      >
-        Login
-      </button>
     </div>
-    <loader
-      v-show="isPreload"
-      name="spinning"
-      object="#ff9633"
-      color1="#ffffff"
-      color2="#17fd3d"
-      size="12"
-      speed="1"
-      bg="#343a40"
-      objectbg="#999793"
-      opacity="80"
-      disableScrolling="false"
-    />
   </div>
 </template>
 
@@ -102,13 +104,19 @@ export default class Login extends Vue {
 
 <style lang="scss">
 .login {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background-image: url('./../assets/background.jpg');
+  background-size: cover;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
   &__form {
     width: 250px;
+    box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);
   }
 
   &__input {
