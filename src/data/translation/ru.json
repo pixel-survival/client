@@ -1,4 +1,7 @@
 {
 	"Value out of range for {value}. Expected: min {value}, max {value}, instead got: {value}.": "Некорректное значение для поля {value}. Минимальное количество символов: {value}, максимальное: {value}, текущее: {value}.",
+	"Value {value} does not match the rule.": "Значение поля {value} не соответствует правилу.",
+	"User update error.": "Ошибка обновления пользователя.",
+	"Invalid login or password.": "Неправильный логин или пароль.",
 	"connection-errors.default": "Нет связи с сервером или отсутствует подключение к интернету, попробуйте позже."
 }
