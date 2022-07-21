@@ -8,6 +8,7 @@
           placeholder="Login"
           autofocus
           v-model="login"
+          v-lowercase
           @keydown.enter="auth"
           @keypress="validateInput($event, rules)"
         />

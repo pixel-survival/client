@@ -6,6 +6,7 @@ import Translator from './utils/Translator';
 import translation from './data/translation';
 import store from './store';
 import './mixins';
+import './directives';
 import '../node_modules/ps-gui/dist/ps.css';
 
 Vue.config.productionTip = false;
