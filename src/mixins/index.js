@@ -4,15 +4,9 @@ Vue.mixin({
   computed: { 
     $config() {
       if (window.__CONFIG && typeof window.__CONFIG === 'object') {
-        return {
-          ip: window.__CONFIG.ip || "localhost",
-          port: window.__CONFIG.port || "80"
-        };
+        return window.__CONFIG;
       } else {
-        return {
-          ip: "localhost",
-          port: "80"
-        }
+        throw new Error('Missing configuration file');
       }
     }
   }

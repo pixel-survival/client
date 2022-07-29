@@ -10,7 +10,7 @@ import './directives';
 import '../node_modules/ps-gui/dist/ps.css';
 
 Vue.config.productionTip = false;
-Vue.prototype.$translator = new Translator(translation['ru'])
+Vue.prototype.$translator = new Translator(translation['ru']);
 Vue.use(vmodal);
 Vue.use(loader);
 

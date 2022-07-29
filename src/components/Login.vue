@@ -61,8 +61,8 @@ export default class Login extends Vue {
   rules = /^[a-zA-Z0-9]+$/;
   
   async auth() {
-    const ip = this.$config.ip;
-    const port = this.$config.port;
+    const ip = this.$config.loginserver.ip;
+    const port = this.$config.loginserver.port;
     const loginClient = new LoginClient({
       ip,
       port

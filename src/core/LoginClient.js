@@ -1,40 +1,40 @@
 class LoginClient {
-    constructor(params) {
-        this._protocol = params.protocol || 'http';
-        this._ip = params.ip || 'localhost';
-        this._port = params.port || '80';
-    }
+  constructor(params) {
+    this._protocol = params.protocol || 'http';
+    this._ip = params.ip || 'localhost';
+    this._port = params.port || '80';
+  }
 
-    async auth(login, password) {
-        const address = `${this._protocol}://${this._ip}:${this._port}/auth/`;
-        const response = await this._request(address, 'POST', {
-            login,
-            password
-        });
+  async auth(login, password) {
+    const address = `${this._protocol}://${this._ip}:${this._port}/auth/`;
+    const response = await this._request(address, 'POST', {
+      login,
+      password
+    });
 
-        return response;
-    }
+    return response;
+  }
 
-    async _request(address, method = 'GET', body = {}) {
-        let data;
+  async _request(address, method = 'GET', body = {}) {
+    let data;
 
-        await fetch(address, {
-            method,
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        }).then(async response => {
-            data = await response.json();
-        }).catch(() => {
-            data = {
-                status: 'error',
-                message: 'connection-errors.default'
-            };
-        });
+    await fetch(address, {
+      method,
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    }).then(async response => {
+      data = await response.json();
+    }).catch(() => {
+      data = {
+        status: 'error',
+        message: 'connection-errors.default'
+      };
+    });
 
-        return data;
-    }
+    return data;
+  }
 }
 
 module.exports = LoginClient;
