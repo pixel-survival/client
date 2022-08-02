@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login__container">
-      <div class="login__form ps-panel ps-panel--yellow">
+      <div v-show="!isPreload" class="login__form ps-panel ps-panel--yellow">
         <input
           type="text"
           class="login__input ps-input"
@@ -27,19 +27,7 @@
           Login
         </button>
       </div>
-      <loader
-        v-show="isPreload"
-        name="spinning"
-        object="#ff9633"
-        color1="#ffffff"
-        color2="#17fd3d"
-        size="12"
-        speed="1"
-        bg="#343a40"
-        objectbg="#999793"
-        opacity="80"
-        disableScrolling="false"
-      />
+      <Preloader v-if="isPreload" />
     </div>
   </div>
 </template>
@@ -47,9 +35,13 @@
 <script>
 import { Vue, Component } from 'vue-property-decorator';
 import { mapMutations } from 'vuex';
+import Preloader from '../components/Preloader';
 import LoginClient from '../core/LoginClient';
 
 @Component({
+  components: {
+    Preloader
+  },
   methods: {
     ...mapMutations(['SET_TOKEN'])
   }
@@ -74,15 +66,15 @@ export default class Login extends Vue {
     
     if (response.status === 'success') {
       this.SET_TOKEN(response.data.token);
-      this.isPreload = false;
     }
 
     if (response.status === 'error') {
       this.$modal.show('login-failed', {
         text: this.$translator.translate(response.message)
       });
-      this.isPreload = false;
     }
+
+    this.isPreload = false;
   }
 
   validateInput(event, rules) {
@@ -99,10 +91,6 @@ export default class Login extends Vue {
 
 <style lang="scss">
 .login {
-  background-image: url('./../assets/background.jpg');
-  background-size: cover;
-  background-position: center;
-
   &__container {
     display: flex;
     justify-content: center;

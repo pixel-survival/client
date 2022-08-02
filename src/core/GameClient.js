@@ -8,14 +8,29 @@ class GameClient {
     this._socket = null;
   }
 
-  connect(token) {
-    const payload = {
-      query: {
-        token
+  async connect(token) {
+    return new Promise((resolve) => {
+      const payload = {
+        query: {
+          token
+        },
+        reconnection: false
       }
-    }
-    
-    this._socket = io(`${this._protocol}://${this._ip}:${this._port}`, payload);
+      
+      this._socket = io(`${this._protocol}://${this._ip}:${this._port}`, payload);
+  
+      this._socket.io.on("error", (error) => {
+        if (error instanceof Error) {
+          resolve(false);
+        }
+      });
+  
+      this._socket.on("connect", () => {
+        if (this._socket.connected) {
+          resolve(true);
+        }
+      });
+    });
   }
 
   on(event, callback) {

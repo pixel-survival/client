@@ -29,7 +29,7 @@ class LoginClient {
     }).catch(() => {
       data = {
         status: 'error',
-        message: 'connection-errors.default'
+        message: 'connection-errors.loginserver.auth'
       };
     });
 
