@@ -13,6 +13,11 @@ import GameClient from './../core/GameClient';
 import players from './../core/Players';
 import Elpy from 'elpy';
 
+//fix
+import bg from '../assets/images/rpgTile019.png';
+import bg02 from '../assets/images/rpgTile009.png';
+//
+
 @Component({
   components: {
     Preloader
@@ -31,20 +36,6 @@ export default class Game extends Vue {
   gameClient = null;
   elpy = null;
 
-  async connect() {
-    const responce = await this.gameClient.connect(this.token);
-
-    if (responce) {
-      this.gameEngineInit();
-      this.serverEventCallbacksInit();
-    } else {
-      this.SET_TOKEN(null);
-      this.$modal.show('login-failed', {
-        text: this.$translator.translate('connection-errors.gameserver.auth')
-      });
-    }
-  }
-
   gameClientInit() {
     const ip = this.$config.gameserver.ip;
     const port = this.$config.gameserver.port;
@@ -54,38 +45,82 @@ export default class Game extends Vue {
       port
     });
   }
+
+  async connect() {
+    const responce = await this.gameClient.connect(this.token);
+
+    if (responce) {
+      this.gameEngineInit();
+      this.serverEventCallbacksInit();
+      this.enterWorld();
+    } else {
+      this.SET_TOKEN(null);
+      this.$modal.show('login-failed', {
+        text: this.$translator.translate('connection-errors.gameserver.auth')
+      });
+    }
+  }
   
   gameEngineInit() {
     const field = this.$refs.field;
    
     this.elpy = new Elpy(field, window.width, window.height);
+    //
+    const background = this.elpy.create('background', -2000, -2000, 4000, 4000, {
+      image: {
+        src: bg,
+        repeat: true
+      }
+    });
+    const ground = this.elpy.create('ground', 100, 100, 64, 64, { image: bg02 });
+
+    this.elpy.add(background);
+    this.elpy.add(ground);
+    this.elpy.click((x, y) => {
+      const player = players.getById(1);
+
+      this.gameClient.send('player:move', { x: x + player.offset.x, y: y + player.offset.y });
+    });
+    //
     this.elpy.load();
   }
 
   serverEventCallbacksInit() {
-      this.gameClient.on('auth', this.onAuth);
-      //this.gameClient.on('responce:player:move', this.onPlayerMove);
+      this.gameClient.on('world:entered', this.onEnteredWorld);
+      this.gameClient.on('player:moving', this.onPlayerMoving);
   }
 
-  onAuth(data) {
-    const { login, x, y } = data.user;
+  enterWorld() {
+    this.gameClient.send('world:enter');
+  }
+
+  onEnteredWorld(data) {
+    const login = data.user.login;
+    const x = data.user.x;
+    const y = data.user.y;
     const width = 20;
     const height = 20;
-    const player = this.elpy.create(login, x, y, width, height, {
+    const player = this.elpy.create(login, this.elpy.width / 2,  this.elpy.height / 2, width, height, {
+      offset: {
+        x: true,
+        y: true
+      },
+      main: true,
       custom: {
         id: data.user.id
       }
     });
-    
+
     this.elpy.add(player);
     
+    player.move(x, y);
     players.add(player);
   }
 
-  onPlayerMove(data) {
-    const player = players.getById(data.user.id);
+  onPlayerMoving(data) {
+    const player = players.getById(data.id);
 
-    player.move(data.user.x, data.user.y);
+    player.move(data.x, data.y);
   }
 
   async mounted() {

@@ -36,6 +36,10 @@ class GameClient {
   on(event, callback) {
     this._socket.on(event, callback);
   }
+
+  send(event, data) {
+    this._socket.emit(event, data);
+  }
 }
 
 module.exports = GameClient;
