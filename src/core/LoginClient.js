@@ -5,7 +5,7 @@ class LoginClient {
     this._port = params.port || '80';
   }
 
-  async auth(login, password) {
+  async connect(login, password) {
     const address = `${this._protocol}://${this._ip}:${this._port}/auth/`;
     const response = await this._request(address, 'POST', {
       login,

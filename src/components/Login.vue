@@ -50,19 +50,28 @@ export default class Login extends Vue {
   login = '';
   password = '';
   isPreload = false;
+  loginClient = null;
   rules = /^[a-zA-Z0-9]+$/;
   
   async auth() {
+    this.initLoginClient();    
+    this.isPreload = true;
+    await this.connect();
+    this.isPreload = false;
+  }
+
+  initLoginClient() {
     const ip = this.$config.loginserver.ip;
     const port = this.$config.loginserver.port;
-    const loginClient = new LoginClient({
+    
+    this.loginClient = new LoginClient({
       ip,
       port
     });
-    
-    this.isPreload = true;
+  }
 
-    const response = await loginClient.auth(this.login, this.password);
+  async connect() {
+    const response = await this.loginClient.connect(this.login, this.password);
     
     if (response.status === 'success') {
       this.SET_TOKEN(response.data.token);
@@ -73,8 +82,6 @@ export default class Login extends Vue {
         text: this.$translator.translate(response.message)
       });
     }
-
-    this.isPreload = false;
   }
 
   validateInput(event, rules) {

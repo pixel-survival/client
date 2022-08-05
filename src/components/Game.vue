@@ -10,6 +10,7 @@ import { mapGetters } from 'vuex';
 import { mapMutations } from 'vuex';
 import Preloader from './Preloader';
 import GameClient from './../core/GameClient';
+import players from './../core/Players';
 import Elpy from 'elpy';
 
 @Component({
@@ -27,47 +28,71 @@ import Elpy from 'elpy';
 })
 export default class Game extends Vue {
   isPreload = false;
+  gameClient = null;
+  elpy = null;
 
   async connect() {
-    const ip = this.$config.gameserver.ip;
-    const port = this.$config.gameserver.port;
-    const gameClient = new GameClient({
-      ip,
-      port
-    });
-
-    this.isPreload = true;
-
-    const responce = await gameClient.connect(this.token);
-
-    if (!responce) {
-      this.SET_TOKEN(null);
-    }
-
-    this.isPreload = false;
-
-    return responce;
-  }
-  
-  loadGame() {
-    const field = this.$refs.field;
-    const elpy = new Elpy(field, window.width, window.height);
-    const test = elpy.create('test', 10, 10, 20, 20);
-
-    elpy.add(test);
-    elpy.load();
-  }
-
-  async mounted() {
-    const responce = await this.connect();
+    const responce = await this.gameClient.connect(this.token);
 
     if (responce) {
-      this.loadGame();
+      this.gameEngineInit();
+      this.serverEventCallbacksInit();
     } else {
+      this.SET_TOKEN(null);
       this.$modal.show('login-failed', {
         text: this.$translator.translate('connection-errors.gameserver.auth')
       });
     }
+  }
+
+  gameClientInit() {
+    const ip = this.$config.gameserver.ip;
+    const port = this.$config.gameserver.port;
+    
+    this.gameClient = new GameClient({
+      ip,
+      port
+    });
+  }
+  
+  gameEngineInit() {
+    const field = this.$refs.field;
+   
+    this.elpy = new Elpy(field, window.width, window.height);
+    this.elpy.load();
+  }
+
+  serverEventCallbacksInit() {
+      this.gameClient.on('auth', this.onAuth);
+      //this.gameClient.on('responce:player:move', this.onPlayerMove);
+  }
+
+  onAuth(data) {
+    const { login, x, y } = data.user;
+    const width = 20;
+    const height = 20;
+    const player = this.elpy.create(login, x, y, width, height, {
+      custom: {
+        id: data.user.id
+      }
+    });
+    
+    this.elpy.add(player);
+    
+    players.add(player);
+  }
+
+  onPlayerMove(data) {
+    const player = players.getById(data.user.id);
+
+    player.move(data.user.x, data.user.y);
+  }
+
+  async mounted() {
+    this.gameClientInit();
+    this.isPreload = true;
+    await this.connect();
+    this.isPreload = false;
   }
 }
 </script>
