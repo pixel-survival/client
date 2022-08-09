@@ -16,6 +16,7 @@ import Elpy from 'elpy';
 //fix
 import bg from '../assets/images/rpgTile019.png';
 import bg02 from '../assets/images/rpgTile009.png';
+import character from '../assets/characters/front.png';
 //
 
 @Component({
@@ -65,7 +66,7 @@ export default class Game extends Vue {
     const field = this.$refs.field;
    
     this.elpy = new Elpy(field, window.width, window.height);
-    //
+    //fix
     const background = this.elpy.create('background', -2000, -2000, 4000, 4000, {
       image: {
         src: bg,
@@ -79,7 +80,10 @@ export default class Game extends Vue {
     this.elpy.click((x, y) => {
       const player = players.getById(1);
 
-      this.gameClient.send('player:move', { x: x + player.offset.x, y: y + player.offset.y });
+      this.gameClient.send('player:move', {
+        x: Math.floor(x + player.offset.x - (player.width / 2)),
+        y: Math.floor(y + player.offset.y - (player.height / 2))
+      });
     });
     //
     this.elpy.load();
@@ -98,9 +102,9 @@ export default class Game extends Vue {
     const login = data.user.login;
     const x = data.user.x;
     const y = data.user.y;
-    const width = 20;
-    const height = 20;
-    const player = this.elpy.create(login, this.elpy.width / 2,  this.elpy.height / 2, width, height, {
+    const width = 32;
+    const height = 42;
+    const player = this.elpy.create(login, (this.elpy.width / 2) - (width / 2), (this.elpy.height / 2) - (height / 2), width, height, {
       offset: {
         x: true,
         y: true
@@ -108,7 +112,8 @@ export default class Game extends Vue {
       main: true,
       custom: {
         id: data.user.id
-      }
+      },
+      image: character
     });
 
     this.elpy.add(player);

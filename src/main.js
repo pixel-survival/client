@@ -7,7 +7,7 @@ import translation from './data/translation';
 import store from './store';
 import './mixins';
 import './directives';
-import '../node_modules/ps-gui/dist/ps.css';
+import '../node_modules/ps.ui/dist/ps.css';
 
 Vue.config.productionTip = false;
 Vue.prototype.$translator = new Translator(translation['ru']);
