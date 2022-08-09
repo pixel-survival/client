@@ -92,6 +92,7 @@ export default class Game extends Vue {
   serverEventCallbacksInit() {
       this.gameClient.on('world:entered', this.onEnteredWorld);
       this.gameClient.on('player:moving', this.onPlayerMoving);
+      this.gameClient.on('disconnect', this.onDisconnect);
   }
 
   enterWorld() {
@@ -126,6 +127,13 @@ export default class Game extends Vue {
     const player = players.getById(data.id);
 
     player.move(data.x, data.y);
+  }
+
+  onDisconnect() {
+    this.SET_TOKEN(null);
+    this.$modal.show('login-failed', {
+      text: this.$translator.translate('connection-errors.gameserver.validation')
+    });
   }
 
   async mounted() {
