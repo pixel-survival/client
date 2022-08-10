@@ -10,7 +10,7 @@ import { mapGetters } from 'vuex';
 import { mapMutations } from 'vuex';
 import Preloader from './Preloader';
 import GameClient from './../core/GameClient';
-import players from './../core/Players';
+import Players from './../core/Players';
 import Elpy from 'elpy';
 
 //fix
@@ -33,6 +33,7 @@ import character from '../assets/characters/front.png';
   }
 })
 export default class Game extends Vue {
+  players = null;
   isPreload = false;
   gameClient = null;
   elpy = null;
@@ -51,6 +52,7 @@ export default class Game extends Vue {
     const responce = await this.gameClient.connect(this.token);
 
     if (responce) {
+      this.players = new Players();
       this.gameEngineInit();
       this.serverEventCallbacksInit();
       this.enterWorld();
@@ -78,7 +80,7 @@ export default class Game extends Vue {
     this.elpy.add(background);
     this.elpy.add(ground);
     this.elpy.click((x, y) => {
-      const player = players.getById(1);
+      const player = this.players.getById(1);
 
       this.gameClient.send('player:move', {
         x: Math.floor(x + player.offset.x - (player.width / 2)),
@@ -120,11 +122,12 @@ export default class Game extends Vue {
     this.elpy.add(player);
     
     player.move(x, y);
-    players.add(player);
+    
+    this.players.add(player);
   }
 
   onPlayerMoving(data) {
-    const player = players.getById(data.id);
+    const player = this.players.getById(data.id);
 
     player.move(data.x, data.y);
   }

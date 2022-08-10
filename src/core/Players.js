@@ -14,4 +14,4 @@ class Players {
   }
 }
 
-export default new Players();
+export default Players;
