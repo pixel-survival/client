@@ -78,7 +78,7 @@ export default class Login extends Vue {
     }
 
     if (response.status === 'error') {
-      this.$modal.show('login-failed', {
+      this.$modal.show('info', {
         text: this.$translator.translate(response.message)
       });
     }

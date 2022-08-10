@@ -4,11 +4,11 @@
     classes="ps-panel"
     @before-open="onBeforeOpen"
   >
-    <div class="login-failed__container"> 
-      <div class="login-failed__text">{{ text }}</div>
+    <div class="modal-info__container"> 
+      <div class="modal-info__text">{{ text }}</div>
       <button
         type="button"
-        class="login__button ps-button ps-button--blue"
+        class="modal-info__button ps-button ps-button--blue"
         @click="close"
       >
         Ok
@@ -21,8 +21,8 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
-export default class ModalLoginFailed extends Vue {
-    name = 'login-failed';
+export default class ModalInfo extends Vue {
+    name = 'info';
     text = '';
 
     onBeforeOpen(event) {
@@ -37,7 +37,7 @@ export default class ModalLoginFailed extends Vue {
 </script>
 
 <style lang="scss">
-.login-failed {
+.modal-info {
   &__container {
     color: #fff;
     display: flex;
@@ -54,6 +54,13 @@ export default class ModalLoginFailed extends Vue {
     padding: 0px 100px;
     line-height: 24px;
     color: #000;
+  }
+
+  &__button {
+    font-size: 24px;
+    color: #fff;
+    font-weight: bold;
+    padding: 6.5px 0px;
   }
 }
 </style>

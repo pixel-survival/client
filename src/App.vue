@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <Login v-if="!isAuthenticated" />
     <Game v-if="isAuthenticated" />
-    <ModalLoginFailed />
+    <ModalInfo />
   </div>
 </template>
 
@@ -11,13 +11,13 @@ import { Vue, Component } from 'vue-property-decorator';
 import { mapGetters } from 'vuex'
 import Login from './components/Login';
 import Game from './components/Game';
-import ModalLoginFailed from './components/Modals/ModalLoginFailed';
+import ModalInfo from './components/Modals/ModalInfo';
 
 @Component({
   components: {
     Login,
     Game,
-    ModalLoginFailed
+    ModalInfo
   },
   computed: {
     ...mapGetters([
@@ -41,13 +41,5 @@ body {
   background-image: url('./assets/background.jpg');
   background-size: cover;
   background-position: center;
-}
-
-.valid {
-  border-color: #28a745 !important;
-}
-
-.invalid {
-  border-color: #dc3545 !important;
 }
 </style>

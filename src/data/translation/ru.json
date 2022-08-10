@@ -5,5 +5,5 @@
 	"Invalid login or password.": "Неправильный логин или пароль.",
 	"connection-errors.loginserver.auth": "Нет связи с сервером авторизации или отсутствует подключение к интернету, попробуйте позже.",
 	"connection-errors.gameserver.auth": "Нет связи с игровым сервером или отсутствует подключение к интернету, попробуйте позже.",
-	"connection-errors.gameserver.validation": "Ошибка валидации токена"
+	"disconnect.gameserver": "Игровой сервер в данный момент недоступен"
 }

@@ -56,7 +56,7 @@ export default class Game extends Vue {
       this.enterWorld();
     } else {
       this.SET_TOKEN(null);
-      this.$modal.show('login-failed', {
+      this.$modal.show('info', {
         text: this.$translator.translate('connection-errors.gameserver.auth')
       });
     }
@@ -131,8 +131,8 @@ export default class Game extends Vue {
 
   onDisconnect() {
     this.SET_TOKEN(null);
-    this.$modal.show('login-failed', {
-      text: this.$translator.translate('connection-errors.gameserver.validation')
+    this.$modal.show('info', {
+      text: this.$translator.translate('disconnect.gameserver')
     });
   }
 
