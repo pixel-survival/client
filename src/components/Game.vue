@@ -11,13 +11,8 @@ import { mapMutations } from 'vuex';
 import Preloader from './Preloader';
 import GameClient from './../core/GameClient';
 import Players from './../core/Players';
+import images from './../utils/images';
 import Elpy from 'elpy';
-
-//fix
-import bg from '../assets/images/rpgTile019.png';
-import bg02 from '../assets/images/rpgTile009.png';
-import character from '../assets/characters/front.png';
-//
 
 @Component({
   components: {
@@ -71,11 +66,11 @@ export default class Game extends Vue {
     //fix
     const background = this.elpy.create('background', -2000, -2000, 4000, 4000, {
       image: {
-        src: bg,
+        src: images.bg,
         repeat: true
       }
     });
-    const ground = this.elpy.create('ground', 100, 100, 64, 64, { image: bg02 });
+    const ground = this.elpy.create('ground', 100, 100, 64, 64, { image: images.bg02 });
 
     this.elpy.add(background);
     this.elpy.add(ground);
@@ -116,7 +111,7 @@ export default class Game extends Vue {
       custom: {
         id: data.user.id
       },
-      image: character
+      image: images.character
     });
 
     this.elpy.add(player);
