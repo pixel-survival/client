@@ -24,7 +24,9 @@ import Elpy from 'elpy';
     ])
   },
   methods: {
-    ...mapMutations(['SET_TOKEN'])
+    ...mapMutations([
+      'SET_TOKEN'
+    ])
   }
 })
 export default class Game extends Vue {
@@ -64,25 +66,13 @@ export default class Game extends Vue {
    
     this.elpy = new Elpy(field, window.width, window.height);
     //fix
-    const background = this.elpy.create('background', -2000, -2000, 4000, 4000, {
-      image: {
-        src: images.bg,
-        repeat: true
-      }
-    });
+    const background = this.elpy.create('background', -2000, -2000, 4000, 4000, { image: { src: images.bg, repeat: true }});
     const ground = this.elpy.create('ground', 100, 100, 64, 64, { image: images.bg02 });
 
     this.elpy.add(background);
     this.elpy.add(ground);
-    this.elpy.click((x, y) => {
-      const player = this.players.getById(1);
-
-      this.gameClient.send('player:move', {
-        x: Math.floor(x + player.offset.x - (player.width / 2)),
-        y: Math.floor(y + player.offset.y - (player.height / 2))
-      });
-    });
     //
+    this.elpy.click(this.onClickField);
     this.elpy.load();
   }
 
@@ -98,11 +88,11 @@ export default class Game extends Vue {
 
   onEnteredWorld(data) {
     const login = data.user.login;
-    const x = data.user.x;
-    const y = data.user.y;
     const width = 32;
     const height = 42;
-    const player = this.elpy.create(login, (this.elpy.width / 2) - (width / 2), (this.elpy.height / 2) - (height / 2), width, height, {
+    const x = (this.elpy.width / 2) - (width / 2);
+    const y = (this.elpy.height / 2) - (height / 2);
+    const player = this.elpy.create(login, x, y, width, height, {
       offset: {
         x: true,
         y: true
@@ -115,16 +105,24 @@ export default class Game extends Vue {
     });
 
     this.elpy.add(player);
-    
-    player.move(x, y);
-    
     this.players.add(player);
+    
+    player.move(data.user.x, data.user.y);
   }
 
   onPlayerMoving(data) {
     const player = this.players.getById(data.id);
 
     player.move(data.x, data.y);
+  }
+
+  onClickField(x, y) {
+    const player = this.players.getById(1);
+
+    this.gameClient.send('player:move', {
+      x: Math.floor(x + player.offset.x - (player.width / 2)),
+      y: Math.floor(y + player.offset.y - (player.height / 2))
+    });
   }
 
   onDisconnect() {

@@ -43,7 +43,9 @@ import LoginClient from '../core/LoginClient';
     Preloader
   },
   methods: {
-    ...mapMutations(['SET_TOKEN'])
+    ...mapMutations([
+      'SET_TOKEN'
+    ])
   }
 })
 export default class Login extends Vue {
