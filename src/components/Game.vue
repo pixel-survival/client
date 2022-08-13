@@ -77,7 +77,8 @@ export default class Game extends Vue {
   }
 
   serverEventCallbacksInit() {
-      this.gameClient.on('world:entered', this.onEnteredWorld);
+      this.gameClient.on('world:entered', this.onWorldEntered);
+      this.gameClient.on('world:welcome', this.onWorldWelcome);
       this.gameClient.on('player:moving', this.onPlayerMoving);
       this.gameClient.on('disconnect', this.onDisconnect);
   }
@@ -86,7 +87,7 @@ export default class Game extends Vue {
     this.gameClient.send('world:enter');
   }
 
-  onEnteredWorld(data) {
+  onWorldEntered(data) {
     const login = data.user.login;
     const width = 32;
     const height = 42;
@@ -108,6 +109,10 @@ export default class Game extends Vue {
     this.players.add(player);
     
     player.move(data.user.x, data.user.y);
+  }
+
+  onWorldWelcome() {
+    // data
   }
 
   onPlayerMoving(data) {
