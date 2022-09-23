@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "elpy": "github:space2pacman/elpy",
+    "elpy": "^1.1.3",
     "ps.ui": "github:pixel-survival/ps.ui",
     "socket.io-client": "^4.5.1",
     "vue": "^2.7.4",

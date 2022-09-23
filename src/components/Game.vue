@@ -31,6 +31,7 @@ import Elpy from 'elpy';
 })
 export default class Game extends Vue {
   players = null;
+  currentPlayer = null;
   isPreload = false;
   gameClient = null;
   elpy = null;
@@ -61,17 +62,14 @@ export default class Game extends Vue {
     }
   }
   
-  gameEngineInit() {
-    const field = this.$refs.field;
-   
-    this.elpy = new Elpy(field, window.width, window.height);
+  gameEngineInit() {   
+    this.elpy = new Elpy(this.$refs.field, window.width, window.height);
     //fix
     const background = this.elpy.create('background', -2000, -2000, 4000, 4000, { image: { src: images.bg, repeat: true }});
     const ground = this.elpy.create('ground', 100, 100, 64, 64, { image: images.bg02 });
-
+    //
     this.elpy.add(background);
     this.elpy.add(ground);
-    //
     this.elpy.click(this.onClickField);
     this.elpy.load();
   }
@@ -94,25 +92,38 @@ export default class Game extends Vue {
     const x = (this.elpy.width / 2) - (width / 2);
     const y = (this.elpy.height / 2) - (height / 2);
     const player = this.elpy.create(login, x, y, width, height, {
-      offset: {
-        x: true,
-        y: true
-      },
-      main: true,
       custom: {
         id: data.user.id
       },
       image: images.character
     });
-
+    
     this.elpy.add(player);
     this.players.add(player);
     
     player.move(data.user.x, data.user.y);
   }
 
-  onWorldWelcome() {
-    // data
+  onWorldWelcome(data) {
+    const login = data.user.login;
+    const width = 32;
+    const height = 42;
+    const x = (this.elpy.width / 2) - (width / 2);
+    const y = (this.elpy.height / 2) - (height / 2);
+    
+    this.currentPlayer = this.elpy.create(login, x, y, width, height, {
+      custom: {
+        id: data.user.id
+      },
+      image: images.character
+    });
+    this.elpy.add(this.currentPlayer);
+    this.players.add(this.currentPlayer);
+    this.currentPlayer.move(data.user.x, data.user.y);
+    this.elpy.fixingCamera(this.currentPlayer, {
+      x: true,
+      y: true
+    });
   }
 
   onPlayerMoving(data) {
@@ -122,11 +133,9 @@ export default class Game extends Vue {
   }
 
   onClickField(x, y) {
-    const player = this.players.getById(1);
-
     this.gameClient.send('player:move', {
-      x: Math.floor(x + player.offset.x - (player.width / 2)),
-      y: Math.floor(y + player.offset.y - (player.height / 2))
+      x: Math.floor(x + this.currentPlayer.offset.x - (this.currentPlayer.width / 2)),
+      y: Math.floor(y + this.currentPlayer.offset.y - (this.currentPlayer.height / 2))
     });
   }
 
