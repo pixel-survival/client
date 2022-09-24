@@ -85,15 +85,33 @@ export default class Game extends Vue {
     this.gameClient.send('world:enter');
   }
 
+  addPlayersFromServer(players) {
+    const width = 32;
+    const height = 42;
+
+    for(let i = 0; i < players.length; i++) {
+      const player = players[i];
+      const playerObject = this.elpy.create(player.login, player.x, player.y, width, height, {
+        custom: {
+          id: player.id
+        },
+        image: images.character
+      });
+
+      this.elpy.add(playerObject);
+      this.players.add(playerObject);
+    }
+  }
+
   onWorldEntered(data) {
-    const login = data.user.login;
+    const login = data.player.login;
     const width = 32;
     const height = 42;
     const x = (this.elpy.width / 2) - (width / 2);
     const y = (this.elpy.height / 2) - (height / 2);
     const player = this.elpy.create(login, x, y, width, height, {
       custom: {
-        id: data.user.id
+        id: data.player.id
       },
       image: images.character
     });
@@ -101,11 +119,11 @@ export default class Game extends Vue {
     this.elpy.add(player);
     this.players.add(player);
     
-    player.move(data.user.x, data.user.y);
+    player.move(data.player.x, data.player.y);
   }
 
   onWorldWelcome(data) {
-    const login = data.user.login;
+    const login = data.player.login;
     const width = 32;
     const height = 42;
     const x = (this.elpy.width / 2) - (width / 2);
@@ -113,17 +131,18 @@ export default class Game extends Vue {
     
     this.currentPlayer = this.elpy.create(login, x, y, width, height, {
       custom: {
-        id: data.user.id
+        id: data.player.id
       },
       image: images.character
     });
     this.elpy.add(this.currentPlayer);
     this.players.add(this.currentPlayer);
-    this.currentPlayer.move(data.user.x, data.user.y);
+    this.currentPlayer.move(data.player.x, data.player.y);
     this.elpy.fixingCamera(this.currentPlayer, {
       x: true,
       y: true
     });
+    this.addPlayersFromServer(data.players);
   }
 
   onPlayerMoving(data) {
