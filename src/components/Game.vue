@@ -5,7 +5,7 @@
     </div>
 </template>
 <script>
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { mapMutations } from 'vuex';
 import Preloader from './Preloader';
@@ -30,19 +30,19 @@ import Elpy from 'elpy';
   }
 })
 export default class Game extends Vue {
+  @Prop() ip;
+  @Prop() port;
+
   players = null;
   currentPlayer = null;
   isPreload = false;
   gameClient = null;
   elpy = null;
 
-  gameClientInit() {
-    const ip = this.$config.gameserver.ip;
-    const port = this.$config.gameserver.port;
-    
+  gameClientInit() {  
     this.gameClient = new GameClient({
-      ip,
-      port
+      ip: this.ip,
+      port: this.port
     });
   }
 
@@ -56,6 +56,7 @@ export default class Game extends Vue {
       this.enterWorld();
     } else {
       this.SET_TOKEN(null);
+      this.$emit('connection-error');
       this.$modal.show('info', {
         text: this.$translator.translate('connection-errors.gameserver.auth')
       });
