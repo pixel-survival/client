@@ -24,6 +24,7 @@
                 <ServerStatus :signal-quality="3" />
               </div>
             </div>
+            <div v-if="servers.length === 0" class="server-list__empty">No servers</div>
           </div>
         </div>
         <div class="server-list__buttons">
@@ -159,6 +160,15 @@ export default class ServerList extends Vue {
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+
+  &__empty {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__panel {
