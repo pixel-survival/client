@@ -18,13 +18,15 @@
             >
               <div class="server-list__cell server-list__cell-server-name">{{ server.name }}</div>
               <div class="server-list__cell server-list__cell-players">
-                {{ server.players.online }} / {{ server.players.max }}
+                {{ server.playersOnline }} / {{ server.playersMax }}
               </div>
               <div class="server-list__cell server-list__cell-status-server">
                 <ServerStatus :signal-quality="3" />
               </div>
             </div>
-            <div v-if="servers.length === 0" class="server-list__empty">No servers</div>
+            <div v-if="servers.length === 0" class="server-list__empty">
+              <span v-if="updatedServerList">No servers</span>
+            </div>
           </div>
         </div>
         <div class="server-list__buttons">
@@ -38,6 +40,7 @@
           <button
             type="button"
             class="server-list__button ps-button ps-button--green"
+            @click="updateServerList"
           >
             Refresh
           </button>
@@ -71,71 +74,8 @@ import ServerStatus from './ServerStatus';
 })
 export default class ServerList extends Vue {
   selectedServerIndex = null;
-  servers = [
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    },
-    {
-      name: 'Pixel survival official server',
-      host: 'localhost',
-      port: 7777,
-      players: {
-        online: 0,
-        max: 32
-      }
-    }
-  ]
+  updatedServerList = false;
+  servers = []
 
   selectServerIndex(index) {
     this.selectedServerIndex = index;
@@ -150,6 +90,22 @@ export default class ServerList extends Vue {
   onLogout() {
     this.SET_TOKEN(null);
   }
+
+  async updateServerList() {
+    // fix наследовать request от LoginClient
+    const response = await fetch(`http://${this.$config.masterserver.ip}:${this.$config.masterserver.port}/server/list/`);
+    const payload = await response.json();
+
+    if (payload.status === 'success') {
+      this.servers = payload.data;
+      this.updatedServerList = true;
+    }
+    //
+  }
+
+  mounted() {
+    this.updateServerList();
+  }
 }
 </script>
 
@@ -163,7 +119,8 @@ export default class ServerList extends Vue {
   }
 
   &__empty {
-    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
     border-radius: 5px;
     height: 100%;
     display: flex;

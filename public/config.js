@@ -1,10 +1,10 @@
 window.__CONFIG = {
   loginserver: {
-    ip: "localhost",
-    port: "81"
+    ip: 'localhost',
+    port: '81'
   },
-  gameserver: {
-    ip: "localhost",
-    port: "7777"
+  masterserver: {
+    ip: 'localhost',
+    port: '7000'
   }
 };
