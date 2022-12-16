@@ -16,15 +16,20 @@ class LoginClient {
   }
 
   async _request(address, method = 'GET', body = {}) {
-    let data;
-
-    await fetch(address, {
+    const params = {
       method,
       headers: {
-        'Content-type': 'application/json'
+        'content-type': 'application/json'
       },
-      body: JSON.stringify(body)
-    }).then(async response => {
+      body: null
+    }
+    let data;
+
+    if (method !== 'GET') {
+      params.body = JSON.stringify(body);
+    }
+
+    await fetch(address, params).then(async response => {
       data = await response.json();
     }).catch(() => {
       data = {

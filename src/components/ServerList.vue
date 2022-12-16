@@ -92,15 +92,13 @@ export default class ServerList extends Vue {
   }
 
   async updateServerList() {
-    // fix наследовать request от LoginClient
-    const response = await fetch(`http://${this.$config.masterserver.ip}:${this.$config.masterserver.port}/server/list/`);
+    const response = await this.$requestMasterServer.get('/server/list/');
     const payload = await response.json();
 
     if (payload.status === 'success') {
       this.servers = payload.data;
       this.updatedServerList = true;
     }
-    //
   }
 
   mounted() {
